@@ -48,9 +48,9 @@ for r in range(REPEATS):
     print('-------------------')
     input_dim = int(pwl.generate_random()[0])
     print('input_dim\t', input_dim)
-    num_channels = int(pwl.generate_random()[0])
+    num_channels = random.randint(1, 16)
     print('num_channels\t', num_channels)
-    numblocks = random.randint(1, 13)  # this should be unbounded for a proper model class
+    numblocks = random.randint(1, 6)  # this should be unbounded for a proper model class
     print('numblocks\t', numblocks)
     blockdepth = random.randint(1, 7)
     print('blockdepth\t', blockdepth)
