@@ -17,7 +17,8 @@ matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 
-REPEATS = 100
+REPEATS = 1000
+MULT = 2
 pwl = powerlaw.Power_Law(xmin=1, discrete=True, parameters=[1.9])
 
 
@@ -41,20 +42,20 @@ def py_init(shape, dtype=None):
     #     return K.random_normal(shape, dtype=dtype)
 
 for r in range(REPEATS):
-    gen = py(0.01)
+    gen = py(0.1)
     # Sample a model
 
     # number of blocks of k convolutions and
     print('-------------------')
-    input_dim = int(pwl.generate_random()[0])
+    input_dim =  16 # int(pwl.generate_random()[0])
     print('input_dim\t', input_dim)
-    num_channels = random.randint(1, 16)
+    num_channels = 32 #  random.randint(1, 32)
     print('num_channels\t', num_channels)
-    numblocks = random.randint(1, 6)  # this should be unbounded for a proper model class
+    numblocks = 8 # random.randint(1, 3)  # this should be unbounded for a proper model class
     print('numblocks\t', numblocks)
-    blockdepth = random.randint(1, 7)
+    blockdepth = 8 #random.randint(1, 32)
     print('blockdepth\t', blockdepth)
-    kernelsize = random.randint(1, 5)
+    kernelsize = 5 # random.randint(1, 5)
     print('kernelsize\t', kernelsize)
 
     encoded = Input(shape=(input_dim,))
@@ -67,7 +68,7 @@ for r in range(REPEATS):
             x = Conv2D(num_channels, (kernelsize, kernelsize), activation='relu', padding='same',
                        kernel_initializer=py_init)(x)
 
-        x = UpSampling2D((2, 2))(x)
+        x = UpSampling2D((MULT, MULT))(x)
 
     decoded = Conv2D(3, (4, 4), activation='sigmoid', padding='same')(x)
     decoder = Model(encoded, decoded)
@@ -84,4 +85,4 @@ for r in range(REPEATS):
         ax = fig.add_subplot(6, 5, i + 1, xticks=[], yticks=[])
         ax.imshow(y[i, ...], cmap=plt.cm.gray)
 
-    plt.savefig('random-images-{:03d}.pdf'.format(r))
+    plt.savefig('random-images-{:04d}.pdf'.format(r))
